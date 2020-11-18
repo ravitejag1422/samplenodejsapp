@@ -10,7 +10,7 @@ node {
             steps {
                 script {
                     echo "TESTING DOCKER"
-                    node --version
+                    
                 }
             }
         }
