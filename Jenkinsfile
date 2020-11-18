@@ -1,18 +1,12 @@
 node {
-    agent {
-        docker {
-            label 'dockeragent'
-            image 'jenkins/jnlp-agent-node'
-        }
+    stage('Build') {
+        echo 'checkout code...'
+        checkout scm
     }
-    stages {     
-        stage ('Prepare') {
-            steps {
-                script {
-                    echo "TESTING DOCKER"
-                    
-                }
-            }
-        }
+    stage('Test') {
+        sh 'node --version'
+    }
+    stage('Deploy') {
+        echo 'Deploying....'
     }
 }
