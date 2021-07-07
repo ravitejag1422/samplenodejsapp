@@ -10,5 +10,6 @@ node {
         echo 'Deploying....'
         sh 'npm install'
         sh 'npm build'
+        sh 'npm run build'
     }
 }
