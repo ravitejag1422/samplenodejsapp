@@ -9,7 +9,10 @@ node {
     stage('Deploy') {
         echo 'Deploying....'
         sh 'npm install'
-        sh 'npm build'
-        sh 'npm start'
+        sh 'nohup node app.js'
     }
+    stage('pushing into s3') {
+        echo 'pushing into s3....'
+        sh 'aws s3 cp . s3://sampleapp-teja --recursive --profile=default'
+         }
 }
