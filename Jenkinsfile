@@ -13,6 +13,6 @@ node {
     }
     stage('pushing into s3') {
         echo 'pushing into s3....'
-        sh 'aws s3 cp public s3://sampleapp-teja --profile=default'
+        sh 'aws s3 cp public s3://sampleapp-teja --recursive'
          }
 }
