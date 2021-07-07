@@ -8,5 +8,6 @@ node {
     }
     stage('Deploy') {
         echo 'Deploying....'
+        sh 'npm install'
     }
 }
