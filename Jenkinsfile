@@ -9,7 +9,7 @@ node {
     stage('Deploy') {
         echo 'Deploying....'
         sh 'npm install'
-        sh 'nohup node app.js'
+        sh 'npm start &'
     }
     stage('pushing into s3') {
         echo 'pushing into s3....'
