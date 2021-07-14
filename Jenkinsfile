@@ -1,4 +1,4 @@
-node {
+/*node {
     stage('Build') {
         echo 'checkout code...'
         checkout scm
@@ -15,4 +15,15 @@ node {
         echo 'pushing into s3....'
         sh 'aws s3 cp public s3://sampleapp-teja --recursive'
          }
+}
+*/
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            when {
+                expression { params.jdkVersion == "14" }
+            }
+        }
+    }
 }
