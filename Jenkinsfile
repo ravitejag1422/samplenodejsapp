@@ -27,8 +27,7 @@ node{
 
 
   stage ('Build Jar') {
-    withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
-        sh "mvn clean package -Dmaven.test.skip=true"
+            sh "mvn clean package -Dmaven.test.skip=true"
     }
   }
 
