@@ -27,8 +27,6 @@ node {
   stage ('Build Jar') {
             sh "mvn clean package -Dmaven.test.skip=true"
     }
-  }
-
   stage ('Build and Deploy DSV image') {
     sh "docker build -t robsonbittencourt/jenkins-pipeline-example:dsv ."
   
