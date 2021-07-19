@@ -19,27 +19,38 @@
          }
 }
 */
-pipeline {
-    agent any
+node{
 
-    parameters {
-        // booleanParam, choice, file, text, password, run, or string
-        booleanParam(defaultValue: true, description: '', name: 'booleanExample')
-        string(defaultValue: "TEST", description: 'What environment?', name: 'stringExample')
-        text(defaultValue: "This is a multiline\n text", description: "Multiline Text", name: "textExample")
-        choice(choices: 'US-EAST-1\nUS-WEST-2', description: 'What AWS region?', name: 'choiceExample')
-        password(defaultValue: "Password", description: "Password Parameter", name: "passwordExample")
-    }
+  git branch: "master", url: "https://github.com/robsonbittencourt/jenkins-pipeline-example" 
 
-    stages {
-        stage("foo") {
-            steps {
-                echo "booleanExample: ${params.booleanExample}"
-                echo "stringExample: ${params.stringExample}"
-                echo "textExample: ${params.textExample}"
-                echo "choiceExample: ${params.choiceExample}"
-                echo "passwordExample: ${params.passwordExample}"
-            }
-        }
+  stage('Unit Tests') {
+    withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
+        sh "mvn test"
     }
+  }
+
+  stage ('Sonarqube') {
+    withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
+        sh "mvn sonar:sonar -Dsonar.host.url=http://sonar:9000"
+    }
+  }
+
+  stage ('Build Jar') {
+    withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
+        sh "mvn clean package -Dmaven.test.skip=true"
+    }
+  }
+
+  stage ('Build and Deploy DSV image') {
+    sh "docker build -t robsonbittencourt/jenkins-pipeline-example:dsv ."
+  
+    docker.withRegistry("", "registryCredential") {
+      sh "docker push robsonbittencourt/jenkins-pipeline-example:dsv"
+    }   
+  }
+
+  stage ('Deploy app in DSV') {
+    sh "docker rm -f app-dsv &>/dev/null && sleep 1 && docker run --name=app-dsv -p 8081:8081 --net jenkins-pipeline-example_default -e SPRING_PROFILES_ACTIVE=dsv -d robsonbittencourt/jenkins-pipeline-example:dsv"
+  }
+  
 }
