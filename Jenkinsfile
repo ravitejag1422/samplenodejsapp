@@ -19,13 +19,11 @@
          }
 }
 */
-node{
-
-  git branch: "master", url: "https://github.com/robsonbittencourt/jenkins-pipeline-example" 
-
-
-
-
+node {
+    stage('Build') {
+        echo 'checkout code...'
+        checkout scm
+    }
   stage ('Build Jar') {
             sh "mvn clean package -Dmaven.test.skip=true"
     }
