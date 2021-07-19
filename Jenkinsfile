@@ -23,17 +23,8 @@ node{
 
   git branch: "master", url: "https://github.com/robsonbittencourt/jenkins-pipeline-example" 
 
-  stage('Unit Tests') {
-    withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
-        sh "mvn test"
-    }
-  }
 
-  stage ('Sonarqube') {
-    withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
-        sh "mvn sonar:sonar -Dsonar.host.url=http://sonar:9000"
-    }
-  }
+
 
   stage ('Build Jar') {
     withEnv(["JAVA_HOME=${ tool "java-8" }", "PATH+MAVEN=${ tool "maven" }/bin:${env.JAVA_HOME}/bin"]) {
